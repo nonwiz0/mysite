@@ -1,4 +1,12 @@
 
-{{ question }}
+<h1>Question: {{question.question_text}} </h1>
+<h2>ID: {{ question.id }} </h2>
+<p> Publication Date: {{question.pub_date}} </p>
 
-<a href="/polls">Go back</a>
+{% for choice in question.choice_set.all %}
+<ul>
+	<li> {{ choice.choice_text }}, voted for {{ choice.votes }} </li>
+</ul>
+{% endfor %}
+
+<a href="{% url 'index' %}">Go back</a>
