@@ -2,11 +2,20 @@
 <h1>Question: {{question.question_text}} </h1>
 <h2>ID: {{ question.id }} </h2>
 <p> Publication Date: {{question.pub_date}} </p>
+{% if error_message %}
+	<p><strong>{{ error_message }} </strong></p>
+{% endif %}
 
-{% for choice in question.choice_set.all %}
-<ul>
-	<li> {{ choice.choice_text }}, voted for {{ choice.votes }} </li>
-</ul>
-{% endfor %}
+<form method="post">
+	{% csrf_token %}
+	{% for choice in question.choice_set.all %}
+	<input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+	<label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br />
+	{% endfor %}
+	<input type="submit" value="Vote">
+	
+</form>
+
+
 
 <a href="{% url 'polls:index' %}">Go back</a>
