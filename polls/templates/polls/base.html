@@ -30,21 +30,14 @@
 	<section>
 	{% comment %} Body {% endcomment %}
     {% block mainbody %} {% endblock %}
-    {% block goback %}
-	<div class="margin-top">
-    <a href="{% url 'polls:index' %}"
-     class="btn btn-secondary" >Go back</a
-    >
-	</div>
-    {% endblock %}
-	</section>
+  </section>
 	<section class="margin-top">
 	{% comment %} Footer {% endcomment %}
       <hr>
       <div class="align-center">
-        <p><address>Contributed by Andreas, Broset, Bryan, Yilin</address></p>
+        <p><address>Contributed by <br /> Andreas, Broset, Bryan, Yilin</address></p>
       </div>
     </section>
-
-  </body>
+ 
+ </body>
 </html>
