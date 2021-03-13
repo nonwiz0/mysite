@@ -1,6 +1,7 @@
 
 {% extends "polls/base.html" %}
 
+{% block title %} Survey #{{question.id}} {% endblock %}
 {% block currPage %} <a href="{% url 'polls:index' %}">Index</a> > Survey #{{question.id}}      {% endblock %}
 {% block heading1%} {{question.question_text}} {% endblock %}
 
