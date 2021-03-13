@@ -1,21 +1,26 @@
 
-{% extends "polls/subbase.html" %}
-
-{% block title%} {{question.question_text}} {% endblock %}
+{% extends "polls/base.html" %}
+{% block currPage %} <a href="{% url 'polls:index' %}">Index</a> > Survey #{{question.id}}      {% endblock %}
+{% block heading1%} {{question.question_text}} {% endblock %}
 
 {% block mainbody %}
-
-<p> Publish date: {{ question.pub_date}} </p>
 <hr />
+<p class="align-center"> Publish date: {{ question.pub_date}} </p>
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 <form action="{% url 'polls:vote' question.id %}" method="post">
 {% csrf_token %}
+<ul class="list-group">
 {% for choice in question.choice_set.all %}
+    <li class="list-group-item d-flex justify-content-between align-items-center btn">
     <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
     <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+    
+    </li>
+
 {% endfor %}
-<input class="btn btn-secondary" type="submit" value="Vote">
+</ul>
+<input class="btn btn-primary" type="submit" value="Vote">
 </form>
 
 {% endblock %}
