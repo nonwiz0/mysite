@@ -2,7 +2,7 @@
 {% extends "polls/base.html" %}
 
 {% block title %} Survey #{{question.id}} {% endblock %}
-{% block currPage %} <a href="{% url 'polls:index' %}">Index</a> > Survey #{{question.id}}      {% endblock %}
+{% block currPage %} <a href="{% url 'polls:index' %}">Index</a> > Survey #{{question.id}}  {% endblock %}
 {% block heading1%} {{question.question_text}} {% endblock %}
 
 {% block mainbody %}
@@ -19,8 +19,8 @@
     </div>
 {% endfor %}
 </ul>
-<div class="margin-top d-grid gap-2 d-md-block">
-    <a href="{% url 'polls:index' %}"> <button class="btn btn-secondary" type="button"> Go Back </button> </a>
+<div class="margin-top d-md-block">
+    <a  href="{% url 'polls:index' %}"> <button  class="btn btn-secondary" type="button"> Go Back </button> </a>
     <button class="btn btn-primary" type="submit"> Vote </button>
     
 </div>

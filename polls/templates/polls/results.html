@@ -2,7 +2,7 @@
 
 {% block title %} Result #{{question.id}} {% endblock %}
 
-{% block currPage %} <a href="{% url 'polls:index' %}">Index</a> ><a href="{% url 'polls:detail' question.id %}"> Survey #{{question.id}} </a> > Result #{{question.id}}    {% endblock %}
+{% block currPage %} <a href="{% url 'polls:index' %}">Index</a> ><a href="{% url 'polls:detail' question.id %}"> Survey #{{question.id}} </a> > Result   {% endblock %}
 {% block heading1%} {{question.question_text}} {% endblock %}
 
 
@@ -18,10 +18,11 @@ vote{{ choice.votes|pluralize }}
 
 {% endfor %}
 </ul>
-<div class="margin-top d-grid gap-2 d-md-block">
+<div class="margin-top d-md-block">
     <a href="{% url 'polls:index' %}"> <button class="btn btn-primary" type="button"> Go Back </button> </a>
     <a class="btn btn-secondary" href="{% url 'polls:detail' question.id %}">Vote
 again?</a>
+    <a href="{% url 'polls:reset_vote' question.id %}" class="btn btn-danger"> Reset </a>
 
 </div>
 

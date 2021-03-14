@@ -63,3 +63,24 @@ def vote(request, question_id):
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+
+def reset_vote(request, question_id):
+    # Commands here
+    question = get_object_or_404(Question, pk=question_id)
+    try:
+        all_choices = question.choice_set.all();
+        for choice in all_choices:
+            choice.votes = 0
+            choice.save()
+    except (KeyError, Choice.DoesNotExist):
+       
+        # Redisplay the question voting form.
+        return render(request, 'polls/results.html', {
+        'question': question,
+        'error_message': "Not sure any error yet.",
+        })
+    else:
+        # Always return an HttpResponseRedirect after successfully dealing
+        # with POST data. This prevents data from being posted twice if a
+        # user hits the Back button.
+        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
