@@ -1,0 +1,51 @@
+{% extends "note_keeper/base.html" %}
+
+{% block mainbody %}
+ {% if latest_note_list %}
+	<h2> Notes: </h2>
+		
+		<div class="flex-container">
+		{% for note in latest_note_list %}
+			<div class="flex-item">
+				<div class="card" style="width: 18rem;">
+					<div class="card-body">
+					<h5 class="card-title">{{ note.title }}</h5>
+					<h6 class="card-subtitle mb-2 text-muted"> {{ note.doc }} </h6>
+					<p class="card-text">{{ note.content | truncatewords:30 }} </p>
+					<a href="#" class="card-link">Edit</a>
+					<a href="#" class="card-link">Delete</a>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+		</div>
+	{% else %}
+		<p> No note are available here. </p>
+	{% endif %}
+<hr />
+<h2> Add Note: </h2>
+
+<form action="{% url 'note_keeper:create_note' %}" method="post">
+{% csrf_token %}
+ <div class="form-group">
+    <label for="title">Title:</label>
+    <input required="required" type="text" class="form-control" id="title" name="title" placeholder="title">
+  </div>
+  <div class="form-group">
+    <label for="content">Content: </label>
+    <textarea required="required" class="form-control" id="content" name="content" rows="3"></textarea>
+  </div>
+  <button class="my-1 btn btn-outline-primary float-right" type="submit">
+<svg xmlns="http://www.w3.org/2000/svg" width="25" height="18" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+</svg> 
+Add 
+</button>
+</form>
+
+
+{% endblock %}
+
+{% block goback %}
+{% endblock %}
