@@ -13,8 +13,11 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         """Return the last five published Note."""
-        return Note.objects.order_by('-doc')[:5]
+        return Note.objects.order_by('-doc')[:]
 
+def delete_note(request, note_id):
+    Note.objects.filter(pk=note_id).delete()
+    return HttpResponseRedirect(reverse('note_keeper:index'))
 
 def create_note(request):
     title = request.POST['title']
