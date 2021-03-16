@@ -5,8 +5,9 @@
 
 {% block mainbody %} 
 <hr />
-<p class="text-center"> Created: {{ note.doc }} </p>
+<p class="text-center"> {% if note.doc >= note.modify_date %} Created: {{ note.doc }} {% endif %} {% if note.modify_date > note.doc %} Modified: {{ note.modify_date }} {% endif %} </p>
 <p> {{ note.content | linebreaks }} </p>
+
 
 <div class="margin-top">
 <a href="{% url 'note_keeper:index' %}"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="30" fill="currentColor" class="bi bi-arrow-left-circle" viewBox="0 0 16 16">

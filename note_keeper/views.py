@@ -13,7 +13,7 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         """Return the last five published Note."""
-        return Note.objects.order_by('-doc')[:]
+        return Note.objects.order_by('-modify_date')[:]
 
 class DetailView(generic.DetailView):
     model = Note
@@ -30,7 +30,8 @@ def delete_note(request, note_id):
 def create_note(request):
     title = request.POST['title']
     content = request.POST['content']
-    note = Note(title=title, content=content, doc=timezone.now())
+    now = timezone.now()
+    note = Note(title=title, content=content, doc=now, modify_date=now)
     note.save()
     return HttpResponseRedirect(reverse('note_keeper:index'))
 
@@ -38,8 +39,8 @@ def update_note(request):
     note_id = request.POST['id']
     title = request.POST['title']
     content = request.POST['content']
-    
     note = Note.objects.get(pk=note_id)
+    note.modify_date = timezone.now()
     note.title = title
     note.content = content 
     note.save()

@@ -1,7 +1,7 @@
 {% extends "note_keeper/base.html" %}
 
 {% block mainbody %}
- {% if latest_note_list %}
+
  <h2> Add Note: </h2>
 <hr />
 <form action="{% url 'note_keeper:create_note' %}" method="post">
@@ -25,7 +25,7 @@ Add
 
 	<h2 class="margin-top"> Notes: </h2>
 	<hr />
-		
+	 {% if latest_note_list %}
 		<div class="flex-container" style="justify-content: center">
 		{% for note in latest_note_list %}
 			<div class="flex-item mx-4 m-5" style="height: 250px">
