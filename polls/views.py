@@ -68,7 +68,7 @@ def reset_vote(request, question_id):
     # Commands here
     question = get_object_or_404(Question, pk=question_id)
     try:
-        all_choices = question.choice_set.all();
+        all_choices = question.choice_set.all()
         for choice in all_choices:
             choice.votes = 0
             choice.save()

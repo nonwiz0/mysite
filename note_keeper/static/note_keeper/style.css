@@ -21,8 +21,8 @@ body {
     background: url("images/bg.svg");
     background-repeat: no-repeat;
     background-position: right bottom;
-    background-size: 300px;
-    margin-right: 200px;
+    background-size: 10em;
+    /* margin-right: 200px; */
     /* background-attachment: scroll; */
 }
 
@@ -99,18 +99,3 @@ a {
 .flex-item {
     height: 200px !important;
 }
-
-/* .cu-grid {
-    
-    display: grid;
-    padding: 20px;
-    grid-column-gap: 20px;
-    grid-row-gap: 10px;
-    grid-template-columns: auto auto auto auto;
-}
-
-.cu-grid-item {
-    background-color: green;
-    padding: 20px;
-    
-} */

@@ -15,6 +15,14 @@ class IndexView(generic.ListView):
         """Return the last five published Note."""
         return Note.objects.order_by('-doc')[:]
 
+class DetailView(generic.DetailView):
+    model = Note
+    template_name = 'note_keeper/note.html'
+
+class EditView(generic.DetailView):
+    model = Note
+    template_name = 'note_keeper/edit_note.html'
+    
 def delete_note(request, note_id):
     Note.objects.filter(pk=note_id).delete()
     return HttpResponseRedirect(reverse('note_keeper:index'))
@@ -25,3 +33,14 @@ def create_note(request):
     note = Note(title=title, content=content, doc=timezone.now())
     note.save()
     return HttpResponseRedirect(reverse('note_keeper:index'))
+
+def update_note(request):
+    note_id = request.POST['id']
+    title = request.POST['title']
+    content = request.POST['content']
+    
+    note = Note.objects.get(pk=note_id)
+    note.title = title
+    note.content = content 
+    note.save()
+    return HttpResponseRedirect(reverse('note_keeper:note', args=[note_id]))

@@ -1,0 +1,48 @@
+{% extends "note_keeper/base.html" %}
+{% block title %} Editing #{{ note.id }} {% endblock %}
+{% block currPage %} <a href="{% url 'note_keeper:index' %}"> Index </a> > Editing {{ note.title }} {% endblock %}
+{% block heading1 %} Editing Mode On {% endblock %}
+
+{% block mainbody %} 
+
+<hr />
+<p class="text-center">Editing <span class="text-muted">{{ note.title }}</span> </p>
+<div class="container">
+
+<div class="row">
+  <div class="col my-1">
+    <h2> Previously: </h2>
+      <label for="title">Title:</label>
+      <input disabled="true" value="{{ note.title }}" type="text" class="form-control" id="title" name="title" placeholder="title">
+        <label for="content">Content: </label>
+        <textarea disabled="true" required="required" class="form-control" id="content" name="content" rows="20">{{ note.content }} </textarea>
+ 
+  </div>
+
+  <div class="col my-1">
+  <form action="{% url 'note_keeper:update_note' %}" method="post">
+  {% csrf_token %}
+  <h2> Currently: </h2>
+   <label for="title">Title:</label>
+    <input value="{{ note.title }}" required="required"  type="text" class="form-control" id="title" name="title" >
+  <label for="content">Content: </label>
+    <textarea required="required" class="form-control" id="content" name="content" rows="20">{{ note.content }}</textarea>
+    <input type="hidden" name="id" value="{{ note.id }}">
+    <div style="text-align: right">
+  
+  <a href="{% url 'note_keeper:note' note.id %}" class="btn btn-secondary"> Cancel </a>
+    <input value="Update" type="submit" class="btn btn-danger my-1 align-right">
+    </div>
+    </form>
+  <div>
+</div>
+
+
+
+
+
+</div>
+{% endblock %}
+
+
+</div>
