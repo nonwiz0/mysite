@@ -75,27 +75,12 @@ a {
     }
 }
 
-.text-white {
-    color: white !important;
-}
-
 .flex-container {
     display: flex;
     flex-wrap: wrap;
 
 }
 
-
-
-
-.flexcontainer > .flex-item {
-  background-color: green;
-    font-size: 20px;
-    margin: 20px;
-    padding: 20px; 
-    width: 200px;
-}
-
 .flex-item {
-    height: 200px !important;
+    height: 300px !important;
 }
