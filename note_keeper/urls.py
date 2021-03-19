@@ -10,8 +10,5 @@ urlpatterns = [
     path('<int:pk>/', views.DetailView.as_view(), name='note'),
     path('<int:pk>/edit', views.EditView.as_view(), name='edit_note'),
     path('update_note', views.update_note, name='update_note')
-    # path('<int:pk>/results/', views.ResultsView.as_view(), name='results'),
-    # path('<int:question_id>/vote/', views.vote, name='vote'),
-    # path('<int:question_id>/reset_vote/', views.reset_vote, name='reset_vote'),
 ]
 

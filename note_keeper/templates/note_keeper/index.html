@@ -31,7 +31,7 @@ Save
 		
 		{% for note in latest_note_list %}
 	
-			<div class="flex-item mx-4 m-5" style="height: 250px">
+			<div class="flex-item mx-4 m-1" style="height: 250px">
 				<div class="card" style="width: 18rem; height: 15rem">
 					<div class="card-body">
 						<h5 class="card-title"><a href="{% url 'note_keeper:note' note.id %}">{{ note.title }}</a></h5>

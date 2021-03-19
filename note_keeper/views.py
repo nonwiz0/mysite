@@ -33,8 +33,12 @@ def delete_note(request, note_id):
 def create_note(request):
     title = request.POST['title']
     content = request.POST['content']
-    now = timezone.now()
-    note = Note(title=title, content=content, doc=now, modify_date=now)
+    for note in Note.objects.all():
+        if note.title == title:
+            messages.info(request, "Title is taken, please use different one!")
+            return HttpResponseRedirect(reverse('note_keeper:index'))
+
+    note = Note(title=title, content=content)
     note.save()
     messages.info(request, 'Note: {} has been saved'.format(title))
     return HttpResponseRedirect(reverse('note_keeper:index'))
@@ -44,7 +48,6 @@ def update_note(request):
     title = request.POST['title']
     content = request.POST['content']
     note = Note.objects.get(pk=note_id)
-
     if note.title == title and note.content == content:
        messages.info(request, "No change detected")
     else:
