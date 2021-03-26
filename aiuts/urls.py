@@ -5,6 +5,7 @@ from . import views
 app_name = 'aiuts'
 urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
+    path('login', views.LoginView.as_view(), name='login'),
     path('sign_up', views.SignupView.as_view(), name='signup'),
     path('get_balance', views.GetbalanceView.as_view(), name='getbalance'),
     path('sign_up/submit', views.create_acc, name='create_acc'),

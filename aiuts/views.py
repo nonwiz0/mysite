@@ -16,6 +16,9 @@ class IndexView(generic.ListView):
         """Return the last five published questions."""
         return User.objects.all()[:]
 
+class LoginView(generic.TemplateView):
+    template_name = 'aiuts/login.html'
+
 class SignupView(generic.TemplateView):
     template_name = 'aiuts/sign_up.html'
 
@@ -44,4 +47,6 @@ def check_balance(request):
         if acc.acc_id == acc_id and acc.password == hash_pw:
             messages.info(request, 'Your account has {} Baht'.format(acc.balance))
             return HttpResponseRedirect(reverse('aiuts:getbalance'))
-  
+        else:
+            messages.info(request, "Entered credential is incorrect")
+            return HttpResponseRedirect(reverse('aiuts:getbalance'))
