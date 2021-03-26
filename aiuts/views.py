@@ -25,6 +25,9 @@ class SignupView(generic.TemplateView):
 class GetbalanceView(generic.TemplateView):
     template_name = 'aiuts/get_balance.html'
 
+class GetaccidView(generic.TemplateView):
+    template_name = 'aiuts/get_acc_id.html'
+
 def create_acc(request):
     fullname = request.POST['fullname']
     password = request.POST['password']
@@ -36,17 +39,33 @@ def create_acc(request):
             return HttpResponseRedirect(reverse('aiuts:signup'))
     new_acc = User(acc_id, hash_pw, random() * 100)    
     new_acc.save()
+    messages.info(request, '{} has been created!'.format(new_acc.acc_id))
     return HttpResponseRedirect(reverse('aiuts:index'))
 
 def check_balance(request):
-    fullname = request.POST['fullname']
+    acc_id = request.POST['acc_id']
     password = request.POST['password']
-    acc_id = hashlib.md5(str.encode(fullname)).hexdigest()
     hash_pw = hashlib.md5(str.encode(password)).hexdigest()
     for acc in User.objects.all():
         if acc.acc_id == acc_id and acc.password == hash_pw:
-            messages.info(request, 'Your account has {} Baht'.format(acc.balance))
+            messages.info(request, 'Your account has {:.2f} Baht'.format(acc.balance))
             return HttpResponseRedirect(reverse('aiuts:getbalance'))
-        else:
-            messages.info(request, "Entered credential is incorrect")
-            return HttpResponseRedirect(reverse('aiuts:getbalance'))
+        if acc.acc_id == acc_id and acc.password != hash_pw:
+            messages.info(request, 'Incorrect credential')
+            return HttpReponseRedirect(reverse('aiuts:getbalance'))
+
+
+def check_accid(request):
+    fullname = request.POST['fullname']
+    password = request.POST['password']
+    hash_acc = hashlib.md5(str.encode(fullname)).hexdigest()
+    hash_pw = hashlib.md5(str.encode(password)).hexdigest()
+    for acc in User.objects.all():
+        if acc.acc_id == hash_acc and acc.password == hash_pw:
+            messages.info(request, 'Acc ID: {}'.format(acc.acc_id))
+            return HttpResponseRedirect(reverse('aiuts:getaccid'))
+        if acc.acc_id == hash_acc and acc.password != has_pw:
+            messages.info(request, 'Incorrect credential')
+            return HttpReponseRedirect(reverse('aiuts:getaccid'))
+
+

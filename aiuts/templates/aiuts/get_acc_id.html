@@ -1,14 +1,14 @@
 {% extends "aiuts/base.html" %}
 
 {% block mainbody %}
-<h2> Check Balance </h2>
+<h2> Check Account ID: </h2>
 <hr />
 
-<form action="{% url 'aiuts:checkbalance' %}" method="post">
+<form action="{% url 'aiuts:checkaccid' %}" method="post">
 {% csrf_token %}
  <div class="form-group">
-    <label for="acc_id">Acc ID:</label>
-    <input required="required" type="text" class="form-control" id="acc_id" name="acc_id" placeholder="f23r432fdsaf3f234323fa">
+    <label for="fullname">Full Name:</label>
+    <input required="required" type="text" class="form-control" id="fullname" name="fullname" placeholder="Andreas Christian Mambu">
   </div>
   <div class="form-group">
     <label for="password">Password: </label>
@@ -17,7 +17,7 @@
   <a class="btn btn-outline-secondary" href="{% url 'aiuts:index' %}"> Go back </a>
   <button class="my-2 btn btn-outline-primary float-right" type="submit">
 >
-Check Balance 
+Check Acc ID 
 </button>
 </form>
 {% endblock %}

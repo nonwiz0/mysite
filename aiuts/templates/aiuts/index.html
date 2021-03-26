@@ -1,7 +1,7 @@
 {% extends "aiuts/base.html" %}
 
 {% block mainbody %}
-<h2> Action </h2>
+<h2> Actions </h2>
 <hr />
 <ul>
  <li> 
@@ -10,8 +10,12 @@
  <li>
 	Get balance: <a href="{% url 'aiuts:getbalance' %}"> here </a>
 </li>
+<li>
+	Forget Acc ID? <a href="{% url 'aiuts:getaccid' %}"> here </a>
+</li>
+</ul>
 {% if all_user %}
-	<h2> Current Accounts </h2>
+	<h2 class="mt-1"> Current Accounts </h2>
 	<hr />
 	<ul>
 		{% for user in all_user %}
