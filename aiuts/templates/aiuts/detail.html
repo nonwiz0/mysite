@@ -1,29 +1,39 @@
 
-{% extends "polls/base.html" %}
-
-{% block title %} Survey #{{question.id}} {% endblock %}
-{% block currPage %} <a href="{% url 'polls:index' %}">Index</a> > Survey #{{question.id}}  {% endblock %}
-{% block heading1%} {{question.question_text}} {% endblock %}
-
+{% extends "aiuts/base.html" %}
 {% block mainbody %}
-<hr />
-<p class="align-center"> Publish date: {{ question.pub_date}} </p>
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+	<h2> Actions </h2>
+	<hr />
+	<p>Acc.ID: {{ user.acc_id }} </p>
+	<h2 class="margin-top"> Send Money </h2>
+	<hr />
+	<form method="post">
+		{% csrf_token %}
+		<div class="form-group">
+			<label> Recipient Acc_id: </label>
+			<input required="required" type="text" class="form-control" name="target_acc" placeholder="asdf2323r234rawf23f">
+			<label> Amount: </label>
+			<input class="form-control" required="required" type="number" min="0" max="{{ user.balance }}" name="balance">
+		</div>
+		<input type="submit" value="Send" class="btn btn-outline-primary my-1">
+	</form>
+	
+	<h2 class="margin-top"> Check Balance </h2>
+	<hr />
+	<form action="{% url 'aiuts:checkbalance' %}" method="post">
+		{% csrf_token %}
+		<div class="form-group">
+			<input type="hidden" name="acc_id" value="{{ user.acc_id }}">
+		</div>
+		<div class="form-group">
+			<label for="password">Password: </label>
+			<input required="required" class="form-control" type="password" name="password" />
+		</div>
+		<button class="my-2 btn btn-outline-primary float-right" type="submit">
+			>
+			Check Balance 
+		</button>
+	</form>
 
-<form action="{% url 'polls:vote' question.id %}" method="post">
-{% csrf_token %}
-{% for choice in question.choice_set.all %}
-<div class="form-check">
-    <input class="form-check-input" type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
-    <label class="form-check-label" for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
-    </div>
-{% endfor %}
-</ul>
-<div class="margin-top d-md-block">
-    <a  href="{% url 'polls:index' %}"> <button  class="btn btn-secondary" type="button"> Go Back </button> </a>
-    <button class="btn btn-primary" type="submit"> Vote </button>
-    
-</div>
-</form>
+	
 
 {% endblock %}

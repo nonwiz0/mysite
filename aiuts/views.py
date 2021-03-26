@@ -18,6 +18,11 @@ class IndexView(generic.ListView):
 
 class LoginView(generic.TemplateView):
     template_name = 'aiuts/login.html'
+    
+
+class AccountView(generic.DetailView):
+    model = User
+    template_name = 'aiuts/detail.html'
 
 class SignupView(generic.TemplateView):
     template_name = 'aiuts/sign_up.html'
@@ -54,7 +59,6 @@ def check_balance(request):
             messages.info(request, 'Incorrect credential')
             return HttpReponseRedirect(reverse('aiuts:getbalance'))
 
-
 def check_accid(request):
     fullname = request.POST['fullname']
     password = request.POST['password']
@@ -67,5 +71,19 @@ def check_accid(request):
         if acc.acc_id == hash_acc and acc.password != has_pw:
             messages.info(request, 'Incorrect credential')
             return HttpReponseRedirect(reverse('aiuts:getaccid'))
+
+
+
+def check_account(request):
+    acc_id = request.POST['acc_id']
+    password = request.POST['password']
+    hash_pw = hashlib.md5(str.encode(password)).hexdigest()
+    for acc in User.objects.all():
+        if acc.acc_id == acc_id and acc.password == hash_pw:
+            messages.info(request, 'Login successfully')
+            return HttpResponseRedirect(reverse('aiuts:account', args=[acc.acc_id]))
+        if acc.acc_id == acc_id and acc.password != hash_pw:
+            messages.info(request, 'Incorrect credential')
+            return HttpResponseRedirect(reverse('aiuts:login'))
 
 
