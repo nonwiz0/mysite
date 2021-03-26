@@ -1,0 +1,29 @@
+
+{% extends "polls/base.html" %}
+
+{% block title %} Survey #{{question.id}} {% endblock %}
+{% block currPage %} <a href="{% url 'polls:index' %}">Index</a> > Survey #{{question.id}}  {% endblock %}
+{% block heading1%} {{question.question_text}} {% endblock %}
+
+{% block mainbody %}
+<hr />
+<p class="align-center"> Publish date: {{ question.pub_date}} </p>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'polls:vote' question.id %}" method="post">
+{% csrf_token %}
+{% for choice in question.choice_set.all %}
+<div class="form-check">
+    <input class="form-check-input" type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+    <label class="form-check-label" for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+    </div>
+{% endfor %}
+</ul>
+<div class="margin-top d-md-block">
+    <a  href="{% url 'polls:index' %}"> <button  class="btn btn-secondary" type="button"> Go Back </button> </a>
+    <button class="btn btn-primary" type="submit"> Vote </button>
+    
+</div>
+</form>
+
+{% endblock %}
