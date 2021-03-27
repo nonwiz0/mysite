@@ -1,19 +1,27 @@
 
 {% extends "aiuts/base.html" %}
+{% block currPage %} <a href="{% url 'aiuts:index' %}"> Index </a> > Dashboard {% endblock %}
+{% block title %} Dashboard {% endblock %}
 {% block mainbody %}
 	<h2> Actions </h2>
 	<hr />
 	<p>Acc.ID: {{ user.acc_id }} </p>
 	<h2 class="margin-top"> Send Money </h2>
 	<hr />
-	<form method="post">
+	<form action="{% url 'aiuts:sendmoney' %}" method="post">
 		{% csrf_token %}
 		<div class="form-group">
+			<input type="hidden" name="source" value="{{ user.acc_id }}"/>
 			<label> Recipient Acc_id: </label>
-			<input required="required" type="text" class="form-control" name="target_acc" placeholder="asdf2323r234rawf23f">
+			<input required="required" type="text" class="form-control" name="destination" placeholder="asdf2323r234rawf23f">
 			<label> Amount: </label>
-			<input class="form-control" required="required" type="number" min="0" max="{{ user.balance }}" name="balance">
+			<input class="form-control" required="required" type="number" min="0" max="{{ user.balance }}" name="amount">
 		</div>
+				<div class="form-group">
+			<label for="password">Password: </label>
+			<input required="required" class="form-control" type="password" name="password" />
+		</div>
+	
 		<input type="submit" value="Send" class="btn btn-outline-primary my-1">
 	</form>
 	

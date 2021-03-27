@@ -14,4 +14,5 @@ urlpatterns = [
     path('get_balance/check', views.check_balance, name="checkbalance"),
     path('get_acc_id', views.GetaccidView.as_view(), name='getaccid'),
     path('get_acc_id/check', views.check_accid, name="checkaccid"),
+    path('send_money', views.send_money, name='sendmoney'),
 ]

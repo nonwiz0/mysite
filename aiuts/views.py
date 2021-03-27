@@ -1,5 +1,5 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views import generic
 from .models import User
@@ -18,11 +18,11 @@ class IndexView(generic.ListView):
 
 class LoginView(generic.TemplateView):
     template_name = 'aiuts/login.html'
-    
+
 
 class AccountView(generic.DetailView):
     model = User
-    template_name = 'aiuts/detail.html'
+    template_name = 'aiuts/account_dash.html'
 
 class SignupView(generic.TemplateView):
     template_name = 'aiuts/sign_up.html'
@@ -54,10 +54,13 @@ def check_balance(request):
     for acc in User.objects.all():
         if acc.acc_id == acc_id and acc.password == hash_pw:
             messages.info(request, 'Your account has {:.2f} Baht'.format(acc.balance))
-            return HttpResponseRedirect(reverse('aiuts:getbalance'))
+          #  return HttpResponseRedirect(reverse('aiuts:getbalance'))
+            return redirect(request.META['HTTP_REFERER'])
         if acc.acc_id == acc_id and acc.password != hash_pw:
             messages.info(request, 'Incorrect credential')
-            return HttpReponseRedirect(reverse('aiuts:getbalance'))
+           # return HttpReponseRedirect(reverse('aiuts:getbalance'))
+            return redirect(request.META['HTTP_REFERER'])
+
 
 def check_accid(request):
     fullname = request.POST['fullname']
@@ -67,12 +70,10 @@ def check_accid(request):
     for acc in User.objects.all():
         if acc.acc_id == hash_acc and acc.password == hash_pw:
             messages.info(request, 'Acc ID: {}'.format(acc.acc_id))
-            return HttpResponseRedirect(reverse('aiuts:getaccid'))
-        if acc.acc_id == hash_acc and acc.password != has_pw:
+            return redirect(request.META['HTTP_REFERER'])
+        if acc.acc_id == hash_acc and acc.password != hash_pw:
             messages.info(request, 'Incorrect credential')
-            return HttpReponseRedirect(reverse('aiuts:getaccid'))
-
-
+            return redirect(request.META['HTTP_REFERER'])
 
 def check_account(request):
     acc_id = request.POST['acc_id']
@@ -85,5 +86,31 @@ def check_account(request):
         if acc.acc_id == acc_id and acc.password != hash_pw:
             messages.info(request, 'Incorrect credential')
             return HttpResponseRedirect(reverse('aiuts:login'))
+
+
+def send_money(request):
+    acc_id = request.POST['source']
+    recipient = request.POST['destination']
+    amount = float(request.POST['amount'])
+    password = request.POST['password']
+    hash_pw = hashlib.md5(str.encode(password)).hexdigest()
+    for acc in User.objects.all():
+        if acc.acc_id == acc_id and acc.password == hash_pw:
+            if amount < acc.balance and User.objects.filter(pk=recipient).exists():
+                recipient_acc = User.objects.get(pk=recipient)
+                acc.balance -= amount
+                recipient_acc.balance += amount
+                recipient_acc.save()
+                acc.save()
+                messages.info(request, "Money sent successfully, you have {} baht left".format(acc.balance))
+                return redirect(request.META['HTTP_REFERER'])
+            else:
+                messages.info(request, "Failed to send, please make sure you have enough balance")
+                return redirect(request.META['HTTP_REFERER'])
+        if acc.acc_id == acc_id and acc.password != hash_pw:
+            messages.info(request, 'Incorrect credential')
+           # return HttpReponseRedirect(reverse('aiuts:getbalance'))
+            return redirect(request.META['HTTP_REFERER'])
+
 
 

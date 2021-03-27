@@ -1,8 +1,11 @@
 {% extends 'aiuts/base.html' %}
-	
+{% block currPage %} <a href="{% url 'aiuts:index' %}"> Index </a> > Login {% endblock %}
+{% block title %} Login  {% endblock %}
+
+
 {% block mainbody %}
-<h2> Login </h2>
-<hr />
+	<h2> Login </h2>
+	<hr />
 	<form action="{% url 'aiuts:checklogin' %}" method="post">
 		{% csrf_token %}
 		<div class="form-group">
