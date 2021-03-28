@@ -16,13 +16,20 @@
 		<li>
 			 <a href="{% url 'aiuts:login' %}">Open Dashboard</a>
 		</li>
+		<li>
+			<a href="{% url 'aiuts:gettransaction' %}"> Summary Transaction </a>
+			</li>
+			<li>
+			<a href="{% url 'aiuts:sendmoneypage' %}"> Send Money </a>
+			</li>
+
 	</ul>
 	{% if all_user %}
 		<h2 class="mt-1"> Current Accounts </h2>
 		<hr />
 		<ul>
 			{% for user in all_user %}
-				<li>{{ user.acc_id }} : {{ user.balance }} Baht </li>
+				<li>{{ user.acc_id }}  </li>
 			{% endfor %}
 		</ul>
 	{% else %}
@@ -35,6 +42,17 @@
 		<li> Broset </li>
 		<li> Bryan </li>
 		<li> Yilin </li>
+	</ul>
+	<h2 class="mt-1"> Changelog: </h2>
+	<hr />
+	<ul>
+		<li> Registration </li>
+		<li> Login </li>
+		<li> Check balance </li>
+		<li> Open dashboard (bypassable) </li>
+		<li> Check account summary </li>
+		<li> Send money </li>
+
 	</ul>
 
 {% endblock %}

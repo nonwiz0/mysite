@@ -82,9 +82,8 @@ def check_account(request):
         if acc.acc_id == acc_id and acc.password == hash_pw:
             messages.info(request, 'Login successfully')
             return HttpResponseRedirect(reverse('aiuts:account', args=[acc.acc_id]))
-        if acc.acc_id == acc_id and acc.password != hash_pw:
-            messages.info(request, 'Incorrect credential')
-            return HttpResponseRedirect(reverse('aiuts:login'))
+    messages.info(request, 'Incorrect credential')
+    return HttpResponseRedirect(reverse('aiuts:login'))
 
 
 def send_money(request):
@@ -125,6 +124,8 @@ def deposit_money(request):
         if hash_pass == user_acc.password:
             user_acc.balance += amount
             user_acc.save()
+            record = Transaction(sender=user_acc, recipient=user_acc, amount=amount, remark="Deposit")
+            record.save()
             messages.info(request, "Your balance right now is {:.2f}".format(user_acc.balance))
             return redirect(request.META['HTTP_REFERER'])
 
@@ -141,6 +142,14 @@ class AccountTransactionView(generic.ListView):
         acc_id = self.kwargs['acc_id']
         return list(Transaction.objects.filter(sender=acc_id))+list(Transaction.objects.filter(recipient=acc_id)[:])
 
+class TransactionView(generic.TemplateView):
+    template_name = 'aiuts/get_summary_with_acc.html'
+
+
+class SendMoneyView(generic.TemplateView):
+    template_name = 'aiuts/send_money.html'
+
+
 def get_summary_of_transaction(request):
     acc_id = request.POST['acc_id']
     password = request.POST['password']
@@ -149,4 +158,6 @@ def get_summary_of_transaction(request):
         user_acc = User.objects.get(pk=acc_id)
         if hash_pass == user_acc.password:
             return HttpResponseRedirect(reverse('aiuts:transactionsummary', args=[acc_id]))
+    messages.info(request, "Incorrect password!")
+    return redirect(request.META['HTTP_REFERER'])
 
