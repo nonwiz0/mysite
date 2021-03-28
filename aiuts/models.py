@@ -13,4 +13,5 @@ class Transaction(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
     recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recipient')
     amount = models.FloatField()
+    remark = models.CharField(max_length=256, default="No message")
     record_date = models.DateTimeField('date recorded', default=timezone.now(), primary_key=True)

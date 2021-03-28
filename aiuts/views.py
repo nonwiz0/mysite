@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views import generic
-from .models import User
+from .models import User, Transaction
 from django.utils import timezone
 import hashlib
 from random import random
@@ -18,7 +18,6 @@ class IndexView(generic.ListView):
 
 class LoginView(generic.TemplateView):
     template_name = 'aiuts/login.html'
-
 
 class AccountView(generic.DetailView):
     model = User
@@ -94,6 +93,7 @@ def send_money(request):
     amount = float(request.POST['amount'])
     password = request.POST['password']
     hash_pw = hashlib.md5(str.encode(password)).hexdigest()
+    remark = request.POST['remark']
     for acc in User.objects.all():
         if acc.acc_id == acc_id and acc.password == hash_pw:
             if amount < acc.balance and User.objects.filter(pk=recipient).exists():
@@ -103,9 +103,11 @@ def send_money(request):
                 recipient_acc.save()
                 acc.save()
                 messages.info(request, "Money sent successfully, you have {} baht left".format(acc.balance))
+                transaction = Transaction(acc.acc_id, recipient_acc.acc_id, amount, remark)
+                transaction.save()
                 return redirect(request.META['HTTP_REFERER'])
             else:
-                messages.info(request, "Failed to send, please make sure you have enough balance")
+                messages.info(request, "Failed to send, please check the address")
                 return redirect(request.META['HTTP_REFERER'])
         if acc.acc_id == acc_id and acc.password != hash_pw:
             messages.info(request, 'Incorrect credential')
@@ -113,4 +115,32 @@ def send_money(request):
             return redirect(request.META['HTTP_REFERER'])
 
 
+def deposit_money(request):
+    acc_id = request.POST['acc_id']
+    amount = float(request.POST['amount'])
+    password = request.POST['password']
+    hash_pass = hashlib.md5(str.encode(password)).hexdigest()
+    if User.objects.filter(pk=acc_id).exists():
+        user_acc = User.objects.get(pk=acc_id)
+        if hash_pass == user_acc.password:
+            user_acc.balance += amount
+            user_acc.save()
+            messages.info(request, "Your balance right now is {:.2f}".format(user_acc.balance))
+            return redirect(request.META['HTTP_REFERER'])
+
+class AccountTransactionView(generic.ListView):
+    template_name = 'aiuts/get_summary.html'
+    context_object_name = 'all_transaction'
+
+    def get_queryset(self):
+        return Transaction.objects.get(sender=self.kwargs['acc_id'])[:]
+
+def get_summary_of_transaction(request):
+    acc_id = request.POST['acc_id']
+    password = request.POST['password']
+    hash_pass = hashlib.md5(str.encode(password)).hexdigest()
+    if User.objects.filter(pk=acc_id).exists():
+        user_acc = User.objects.get(pk=acc_id)
+        if hash_pass == user_acc.password:
+            return HttpResponseRedirect(reverse('aiuts:transactionsummary', args=[acc_id]))
 

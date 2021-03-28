@@ -5,7 +5,22 @@
 {% block mainbody %}
 	<h2> Actions </h2>
 	<hr />
-	<p>Acc.ID: {{ user.acc_id }} </p>
+	<p>Acc.ID: {{ user.acc_id }} : {{ user.balance | floatformat:2}} Baht </p>
+	<h2 class="margin-top"> Deposit Money </h2>
+	<hr />
+	<form action="{% url 'aiuts:depositmoney' %}" method="post">
+		{% csrf_token %}
+		<div class="form-group">
+		<input type="hidden" name="acc_id" value="{{ user.acc_id }}" />
+		<label> Amount: </label>
+		<input class="form-control" required="required" type="number" name="amount">
+		<label> Password: </label>
+		<input class="form-control" required="required" type="password" name="password" />
+
+		<input class="btn my-2 btn-outline-primary" type="submit" value="Deposit">
+		</div>
+
+	</form>
 	<h2 class="margin-top"> Send Money </h2>
 	<hr />
 	<form action="{% url 'aiuts:sendmoney' %}" method="post">
@@ -21,6 +36,8 @@
 			<label for="password">Password: </label>
 			<input required="required" class="form-control" type="password" name="password" />
 		</div>
+		<label> Remark: </label>
+		<textarea name="remark" class="form-control"></textarea>
 	
 		<input type="submit" value="Send" class="btn btn-outline-primary my-1">
 	</form>
@@ -37,10 +54,27 @@
 			<input required="required" class="form-control" type="password" name="password" />
 		</div>
 		<button class="my-2 btn btn-outline-primary float-right" type="submit">
-			>
 			Check Balance 
 		</button>
 	</form>
+
+	<h2 class="margin-top"> Get Summary's Transaction </h2>
+	<hr />
+	<form action="{% url 'aiuts:getsummaryoftransaction' %}" method="POST">
+		{% csrf_token %}
+		<div class="form-group">
+			<input type="hidden" name="acc_id" value="{{ user.acc_id }}">
+		</div>
+		<div class="form-group">
+			<label for="password">Password: </label>
+			<input required="required" class="form-control" type="password" name="password" />
+		</div>
+		<button class="my-2 btn btn-outline-primary float-right" type="submit">
+			Get Summary 
+		</button>
+	</form>
+
+
 
 	
 

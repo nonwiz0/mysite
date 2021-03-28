@@ -1,0 +1,11 @@
+{% extends "aiuts/base.html" %}
+{% block currPage %} <a href="{% url 'aiuts:index' %}"> Index </a> > Check Balance {% endblock %}
+{% block title %} Summary of Transaction {% endblock %}
+
+{% block mainbody %}
+	<h2> Summary of Transaction </h2>
+	<hr />
+	{% for transaction in all_transaction %}
+	<li> Sender: {{transaction.sender}}, Amount: {{ transaction.amount}} Recipient: {{ transaction.recipient}} </li>
+	{% endfor %}
+	{% endblock %}
