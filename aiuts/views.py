@@ -89,7 +89,7 @@ def check_account(request):
 
 def send_money(request):
     acc_id = request.POST['source']
-    recipient = request.POST['destination']
+    recipient = request.POST['destination'].strip()
     amount = float(request.POST['amount'])
     password = request.POST['password']
     hash_pw = hashlib.md5(str.encode(password)).hexdigest()
@@ -103,7 +103,7 @@ def send_money(request):
                 recipient_acc.save()
                 acc.save()
                 messages.info(request, "Money sent successfully, you have {} baht left".format(acc.balance))
-                transaction = Transaction(acc.acc_id, recipient_acc.acc_id, amount, remark)
+                transaction = Transaction(sender=acc, recipient=recipient_acc, amount=amount, remark=remark)
                 transaction.save()
                 return redirect(request.META['HTTP_REFERER'])
             else:
@@ -132,8 +132,14 @@ class AccountTransactionView(generic.ListView):
     template_name = 'aiuts/get_summary.html'
     context_object_name = 'all_transaction'
 
+    def get_context_data (self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user'] = self.kwargs['acc_id']
+        return context
+
     def get_queryset(self):
-        return Transaction.objects.get(sender=self.kwargs['acc_id'])[:]
+        acc_id = self.kwargs['acc_id']
+        return list(Transaction.objects.filter(sender=acc_id))+list(Transaction.objects.filter(recipient=acc_id)[:])
 
 def get_summary_of_transaction(request):
     acc_id = request.POST['acc_id']
