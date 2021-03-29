@@ -39,12 +39,10 @@ def delete_note(request, note_title):
 def create_note(request):
     title = request.POST['title']
     content = request.POST['content']
-    for note in Note.objects.all():
-        if note.title == title:
-            messages.info(request, "Title is taken, please use different one!")
-            return HttpResponseRedirect(reverse('note_keeper:index'))
-
-    note = Note(title=title, content=content)
+    if Note.objects.filter(pk=title).exists():
+        messages.info(request, 'Title is taken! Try again')
+        return HttpResponseRedirect(reverse('note_keeper:index'))
+    note = Note.objects.create(title=title, content=content)
     note.save()
     messages.info(request, 'Note: {} has been saved'.format(title))
     return HttpResponseRedirect(reverse('note_keeper:index'))
