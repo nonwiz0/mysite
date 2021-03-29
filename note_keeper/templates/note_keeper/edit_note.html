@@ -1,5 +1,5 @@
 {% extends "note_keeper/base.html" %}
-{% block title %} Editing #{{ note.id }} {% endblock %}
+{% block title %} Editing #{{ note.title }} {% endblock %}
 {% block currPage %} <a href="{% url 'note_keeper:index' %}"> Index </a> > Editing {{ note.title }} {% endblock %}
 {% block heading1 %} Editing Mode On {% endblock %}
 
@@ -27,10 +27,10 @@
     <input value="{{ note.title }}" required="required"  type="text" class="form-control" id="title" name="title" >
   <label for="content">Content: </label>
     <textarea required="required" class="form-control" id="content" name="content" rows="20">{{ note.content }}</textarea>
-    <input type="hidden" name="id" value="{{ note.id }}">
+    <input type="hidden" name="old_title" value="{{ note.title }}">
     <div style="text-align: right">
   
-  <a href="{% url 'note_keeper:note' note.id %}" class="btn btn-secondary my-1"> Cancel </a>
+  <a href="{% url 'note_keeper:note' note.title %}" class="btn btn-secondary my-1"> Cancel </a>
     <input value="Update" type="submit" class="btn btn-danger my-1 align-right">
     </div>
     </form>
