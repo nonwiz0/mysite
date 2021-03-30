@@ -1,6 +1,7 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
+from django.template import loader
 from django.views import generic
 from .models import User, Transaction
 from django.utils import timezone
@@ -18,10 +19,6 @@ class IndexView(generic.ListView):
 
 class LoginView(generic.TemplateView):
     template_name = 'aiuts/login.html'
-
-class AccountView(generic.DetailView):
-    model = User
-    template_name = 'aiuts/account_dash.html'
 
 class SignupView(generic.TemplateView):
     template_name = 'aiuts/sign_up.html'
@@ -80,8 +77,11 @@ def check_account(request):
     hash_pw = hashlib.md5(str.encode(password)).hexdigest()
     for acc in User.objects.all():
         if acc.acc_id == acc_id and acc.password == hash_pw:
+            template = loader.get_template('aiuts/account_dash.html')
+            user = User.objects.get(pk=acc_id)
+            context = {'user': user}
             messages.info(request, 'Login successfully')
-            return HttpResponseRedirect(reverse('aiuts:account', args=[acc.acc_id]))
+            return HttpResponse(template.render(context, request))
     messages.info(request, 'Incorrect credential')
     return HttpResponseRedirect(reverse('aiuts:login'))
 
@@ -129,22 +129,8 @@ def deposit_money(request):
             messages.info(request, "Your balance right now is {:.2f}".format(user_acc.balance))
             return redirect(request.META['HTTP_REFERER'])
 
-class AccountTransactionView(generic.ListView):
-    template_name = 'aiuts/get_summary.html'
-    context_object_name = 'all_transaction'
-
-    def get_context_data (self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['user'] = self.kwargs['acc_id']
-        return context
-
-    def get_queryset(self):
-        acc_id = self.kwargs['acc_id']
-        return list(Transaction.objects.filter(sender=acc_id))+list(Transaction.objects.filter(recipient=acc_id)[:])
-
 class TransactionView(generic.TemplateView):
     template_name = 'aiuts/get_summary_with_acc.html'
-
 
 class SendMoneyView(generic.TemplateView):
     template_name = 'aiuts/send_money.html'
@@ -154,10 +140,16 @@ def get_summary_of_transaction(request):
     acc_id = request.POST['acc_id']
     password = request.POST['password']
     hash_pass = hashlib.md5(str.encode(password)).hexdigest()
+    template = loader.get_template('aiuts/get_summary.html')
     if User.objects.filter(pk=acc_id).exists():
         user_acc = User.objects.get(pk=acc_id)
         if hash_pass == user_acc.password:
-            return HttpResponseRedirect(reverse('aiuts:transactionsummary', args=[acc_id]))
+            all_transaction = list(Transaction.objects.filter(sender=acc_id))+list(Transaction.objects.filter(recipient=acc_id)[:])
+            context = {
+                'all_transaction': all_transaction,
+                'user': acc_id
+            }
+            return HttpResponse(template.render(context, request))
     messages.info(request, "Incorrect password!")
     return redirect(request.META['HTTP_REFERER'])
 

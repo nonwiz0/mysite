@@ -17,7 +17,7 @@ class NoteIndexViewTests(TestCase):
 class Notecreate_noteTests(TestCase):
     def test_no_title(self):
         response = self.client.post(
-                reverse('note_keeper:create_note'), data={"title": "asdfasdfewf23f23f23", "content": "asdfasdf", follow=True}
+                reverse('note_keeper:create_note'), {"title": "", "content": "asdfasdf"}
         )
         self.assertEqual(response.status_code, 200)
         self.assertContains(
