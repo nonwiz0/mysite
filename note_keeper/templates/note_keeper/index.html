@@ -40,7 +40,8 @@
 		</div>
 	{% else %}
 	<ul>
-		<p> No note are available here. </p>
+		<p> Your notebook is empty right now!
+		</p>
 	</ul>
 	{% endif %}
 
@@ -72,7 +73,7 @@ Save
 		{% for note in all_note %}
 		<li><a href="{% url 'note_keeper:note' note.title %}"> {{ note.title }} </a></li>
 		{% empty %}
-		 No note are available here 
+		 Your notebook is empty right now!
 		{% endfor %}
 	</ul>
 
