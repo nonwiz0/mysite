@@ -1,6 +1,4 @@
 from django.db import models
-from django.utils import timezone
-import datetime
 # Create your models here.
 
 class User(models.Model):
@@ -14,6 +12,6 @@ class Transaction(models.Model):
     recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recipient')
     amount = models.FloatField()
     remark = models.CharField(max_length=256, default="No message")
-    record_date = models.DateTimeField('date recorded', default=timezone.now())
+    record_date = models.DateTimeField('date recorded', auto_now_add=True)
     id = models.AutoField(primary_key=True)
 

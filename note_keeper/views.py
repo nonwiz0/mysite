@@ -56,6 +56,10 @@ def update_note(request):
     title = request.POST['title']
     content = request.POST['content']
     curr_title = request.POST['old_title']
+#    if not len(title) or not len(content):
+#        messages.info(request, "Title or content is empty, please edit it again")
+#        return HttpResponseRedirect(reverse('note_keeper:edit_note', args=[curr_title])) 
+#
     if not Note.objects.filter(pk=curr_title).exists():
         messages.info(request, "Sorry, I cannot let you do this")
         return HttpResponseRedirect(reverse('note_keeper:index'))

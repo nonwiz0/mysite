@@ -7,4 +7,4 @@ class Note(models.Model):
     modify_date = models.DateTimeField('date published', auto_now_add=True)
 
     def __str__(self):
-        return "Title: {} \nContent: {} \nDate of Creation: {} \nLast modify: {}".format(self.title, self.content, self.doc, self.modify_date) 
+        return "Title: {}".format(self.title) 
