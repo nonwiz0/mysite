@@ -63,7 +63,8 @@ def update_note(request):
 
     if note.title == title and note.content == content:
         messages.info(request, "No change detected")
-        return redirect(request.META['HTTP_REFERER'])
+        # return redirect(request.META['HTTP_REFERER'])
+        return HttpResponseRedirect(reverse('note_keeper:index'))
         
     if note.title != title: 
         if Note.objects.filter(pk=title):
